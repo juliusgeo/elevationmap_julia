@@ -18,20 +18,25 @@ end
 
 getelev(38.735375,-77.410316)
 
-using HTTP
-using JSON
-using BenchmarkTools
+using LightXML
 
 
-randomcoord = (40-rand()*5, -80-rand()*-5)
-print(randomcoord)
-rstring = string("https://maps.googleapis.com/maps/api/elevation/json?locations=",string(randomcoord[1]),",",string(randomcoord[2]))
-print(rstring)
-@btime r = HTTP.request("GET", rstring)
-@btime g_val = Float(JSON.parse(String(r.body))["results"][1]["elevation"])
-@btime m_val = getelev(randomcoord[1], randomcoord[2])
+xdoc = parse_file("map.osm")
+
+# get the root element
+xroot = root(xdoc)  # an instance of XMLElement
+# print its name
+println(name(xroot))  # this should print: bookstore
+
+# traverse all its child nodes and print element names
+for way in xroot["way"]  # c is an instance of XMLNode
+    for tag in way["tag"]
+        println(attribute(tag, "k"))
+        if()
+    end
+end
 
 
-
+attribute(xroot["way"][1]["tag"][1], "k")
 
 
